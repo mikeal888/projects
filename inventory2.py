@@ -1,0 +1,1 @@
+# Start a new inventory but make make inventory class and stock class
