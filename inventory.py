@@ -1,23 +1,68 @@
-# Make set of functions which can be used to log and input inventory.
-
-# Basic objects will have name, price, quantity.
+# Start a new inventory but make make inventory class and stock class
+# Inventory must take stock objects 
 
 class stock:
-# Create stock unit
-	def __init__ (self, name, price, quantity):
-		self.name = name 		# Name of stock 
-		self.price = price		# Total cost of stock
-		self.quantity = quantity		# Total quantity of stock
 
-	def add(self, INVENTORY):
+	# Create a stock object 
+
+	def __init__(self, name, price, quantity):
+		self.name = name				# Name of item
+		self.price = price				# Total price of items
+		self.quantity = quantity		# Total quantity of items
+
+
+class inventory(dict):
+	
+	# create a dictionary object which takes stock objects as values
+	# This does no require any initialisation.
+	# Only these dictionary objects will inherit the methods defined below
+
+	def add(self, id):
 		
-		if any(n.name == self.name for n in INVENTORY):		# check if already in inventory
-			prod = list(filter(lambda x: x.name == self.name, INVENTORY))[0]
-			prod.price += self.price
-			prod.quantity += self.quantity
+		# Add contents to inventory
+
+		if id.name in self.keys():
+			self[id.name].price += id.price
+			self[id.name].quantity += id.quantity
+			print('Added', id.quantity, 'units of', id.name)
+			print('Total units of', id.name, '=', self[id.name].quantity)
+			print('Total value of', id.name, '=', '$',self[id.name].price)
 		else:
-			INVENTORY.append(self)
+			self[id.name] = id
+			print('Added', id.quantity, 'units of', id.name)
+			print('Total value of', id.name, '=', '$',self[id.name].price)
 
-		print("Added", self.quantity, "units of",  self.name)
+	def remove(self, id, val):
 
+		# Remove contents from inventory
+		
+		if id.name in self.keys():
+			self[id.name].price -= id.price
+			self[id.name].quantity -= id.quantity
+			print('Removed', id.quantity, 'units of', id.name)
+			print('Total units of', id.name, '=', self[id.name].quantity)
+			print('Total value of', id.name, '=', '$',self[id.name].price)
+		else:
+			print(id.name, 'not in inventory')
 
+	def items(self):
+
+		# Print items in inventory
+
+		for index in self.keys():
+			print(index, self[index].quantity)	
+
+	def summary(self):
+
+		# Make summary text of inventory
+
+		length = len(self)
+		total = 0
+		for index in self.values():
+			total += index.price
+
+		print('Total value of inventory = $', total)
+		print('Items in inventory are:')
+		self.items()
+
+# Note: When object a = stock(...) is added to inventory inventory.add(a), the object that is added to the dictionary is the same object as a. Hence a now equals a.price/quantity += a.price/quantity. 
