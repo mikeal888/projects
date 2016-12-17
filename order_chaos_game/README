@@ -1,0 +1,11 @@
+Develop a game of order and chaos.
+
+Rules of the game.
+
+2 players decide who is order and who is chaos.
+There are two kinds of tokens, red and blue.
+The goal is for ORDER to get 5 tokens in a row either diagonally or horizontally, and CHAOS is trying to stop this.
+Either player can use the red or blue tokens.
+
+
+#--- First write this game so it works in print statements.
