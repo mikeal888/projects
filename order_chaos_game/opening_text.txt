@@ -1,0 +1,7 @@
+Order and Chaos!
+
+Player 1 is order and your goal is get 5 X or O tokens in a row either horizontally, vertically or diagonally.
+
+Player 2 is chaos and must stop order from completing a row of 5 tokens!
+
+Either player can use X OR O tokens in their turn.
