@@ -1,5 +1,9 @@
 #!/usr/bin/python3.5
 
+import numpy as np
+
+toks = ['X','O']
+
 # Contains the functions required to create the game
 # These functions include move, which allows one to move a piece on the board
 
@@ -19,7 +23,7 @@ def pos_check_1(TOKEN, ROW, COL, BOARD):
 	# check position is on on board and valid token
 
 	while True:
-		if TOKEN in toks:
+		if TOKEN in ['X','O']:
 			break
 		else:
 			print('Token must be either X or O')
@@ -47,7 +51,7 @@ def pos_check_2(ROW, COL, BOARD):
 	# Check position is not overlapping other piece
 
 	while True:
-		if BOARD[ROW][COL] in toks:
+		if BOARD[ROW][COL] in ['X','O']:
 			print('\n INVALID MOVE! {} already located at [{},{}] \n'.format(BOARD[ROW][COL], ROW, COL))
 			print_board(BOARD)
 			print('\n')
@@ -73,41 +77,67 @@ def move(TOKEN, ROW, COL, BOARD):
 def column(BOARD, i):
 	return([row[i] for row in BOARD])
 
+# Get diagonal elements of 
+
+def get_diags(BOARD):
+	diag = [r[i] for i, r in enumerate(BOARD)]
+	revdiag = [r[-i-1] for i, r in enumerate(BOARD)]
+	return(diag, revdiag)
+
+# Check all list for winning row
+
+def win_check(LIST, TOKEN):
+	# Check if value in row
+	try:							
+		tokloc = LIST.index(TOKEN)
+		if tokloc<=2:
+			if all(ind == TOKEN for ind in LIST[tokloc:tokloc+5]):
+				print('\nGAME OVER')
+				return(True)
+	except ValueError:
+		return(False)
+
 # Define win function. Check tokens individually.
 
-def win_check(BOARD, TOKEN):
-	# Check rows first
+def check_board(BOARD, TOKEN):
+	# Check rows first. This function will return True if someone has one
+	# False otherwise.
 
 	for row in range(6):
-		# Check if value in row
-		try:							
-			tokloc = BOARD[row].index(TOKEN)
-			if tokloc<=2:
-				if all(ind == TOKEN for ind in BOARD[row][tokloc:tokloc+5]):
-					print('YOU WON!')
-					print_board(BOARD)
-					del(tokloc)		# del tokloc variable
-					break
-
-		except ValueError:
-			pass
+		if win_check(BOARD[row],TOKEN):
+			print_board(BOARD)
+			print('Victory obtained with {} on row {}'.format(TOKEN, row))
+			return(True)
+			print('yes')
+			break
 
 	# Check columns
 	for col in range(6):
 		board_col = column(BOARD,col)
+		if win_check(board_col,TOKEN):
+			print_board(BOARD)
+			print('Victory obtained with {} on column {}'.format(TOKEN, col))
+			return(True)
+			break
 
-		# Check if value in row
-		try:							
-			tokloc = board_col.index(TOKEN)
-			if tokloc<=2:
-				if all(ind == TOKEN for ind in board_col[tokloc:tokloc+5]):
-					print('YOU WON!')
-					print_board(BOARD)
-					del(tokloc)
-					break
+	# Check diagonal wins only possible diagonal 
+	BOARDR = np.roll(BOARD,1)
+	BOARDL = np.roll(BOARD,-1)
 
-		except ValueError:
-			pass
+	diag_list = []
+
+	diag_list.append(get_diags(BOARD))
+	diag_list.append(get_diags(BOARDR))
+	diag_list.append(get_diags(BOARDL))
+
+	for i in range(3):
+		for j in range(2):
+			if win_check(diag_list[i][j], TOKEN):
+				print_board(BOARD)
+				print('Victory obtained with {} on diagonal'.format(TOKEN))
+				return(True)
+				break
+
 
 if __name__ == '__main__':
 	# Define prelims
@@ -117,9 +147,9 @@ if __name__ == '__main__':
 	board = [['-' for col in range(6)] for row in range(6)]
 
 
-	# token1 = input('Token: ')
-	# hcoord = int(input('Horizontal: '))
-	# vcoord = int(input('Vertical: '))
+# 	# token1 = input('Token: ')
+# 	# hcoord = int(input('Horizontal: '))
+# 	# vcoord = int(input('Vertical: '))
 
-	# # move(token1, hcoord, vcoord)
-	# print('\nSUCCESS')
+# 	# # move(token1, hcoord, vcoord)
+# 	# print('\nSUCCESS')
